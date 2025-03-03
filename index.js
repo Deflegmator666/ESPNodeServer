@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 
 app.post("/data", (req, res) => {
   let { id, state } = req.body;
-  let currentDate = new Date().toLocaleString({ timeZone: "Europe/Moscow" });
+  let currentDate = new Date();
   let formingDataObj = {
     id,
     state,
