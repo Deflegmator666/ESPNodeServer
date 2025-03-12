@@ -1,9 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.use(bodyParser.json());
 
 let motionDataArr = [];
@@ -11,6 +13,7 @@ let motionDataArr = [];
 app.delete("/data", (req, res) => {
   try {
     let { objId } = req.body;
+
     let resultSearch = motionDataArr.filter((item) => item.objId !== objId);
     motionDataArr = resultSearch;
     return res.json(motionDataArr);
