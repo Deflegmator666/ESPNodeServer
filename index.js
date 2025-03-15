@@ -5,7 +5,13 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // Разрешить запросы с любого домена
+    methods: ["GET", "POST", "DELETE", "OPTIONS"], // Разрешенные методы
+    allowedHeaders: ["Content-Type", "Authorization"], // Разрешенные заголовки
+  })
+);
 app.options("*", cors());
 app.use(bodyParser.json());
 
