@@ -6,6 +6,7 @@ const app = express();
 const port = 3000;
 
 app.use(cors());
+app.options("*", cors());
 app.use(bodyParser.json());
 
 let motionDataArr = [];
@@ -56,5 +57,6 @@ app.post("/data", (req, res) => {
 // });
 
 app.listen(port, () => {
-  console.log(`Сервер запущен на http://localhost:${port}`);
+  // console.log(`Сервер запущен на http://localhost:${port}`);
+  console.log(`Сервер запущен`);
 });
