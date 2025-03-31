@@ -5,32 +5,27 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 
-const ALLOWED_IPS = ["87.117.50.244"];
 let motionDataArr = [];
 
+const ALLOWED_IPS = ["87.117.50.244", "127.0.0.1"]; // Добавьте нужные IP
+
+app.use(cors()); // Включите CORS
+
 app.use((req, res, next) => {
-  // Получаем IP с учетом прокси (если используется)
-  let clientIP = req.headers["x-forwarded-for"]
-    ? req.headers["x-forwarded-for"].split(",")[0].trim()
-    : req.socket.remoteAddress;
+  let clientIP =
+    req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
+    req.socket.remoteAddress;
 
-  // Убираем префикс ::ffff: для IPv4 в IPv6 (например, ::ffff:192.168.1.1 → 192.168.1.1)
-  if (clientIP.startsWith("::ffff:")) {
-    clientIP = clientIP.substring(7);
-  }
+  clientIP = clientIP.replace(/^::ffff:/, "");
+  clientIP = clientIP === "::1" ? "127.0.0.1" : clientIP;
 
-  // Для локального тестирования (::1 → 127.0.0.1)
-  if (clientIP === "::1") {
-    clientIP = "127.0.0.1";
-  }
+  console.log("IP:", clientIP);
 
-  console.log("Запрос от IP:", clientIP);
-
-  if (ALLOWED_IPS[0] === clientIP) {
+  if (ALLOWED_IPS.includes(clientIP)) {
     next();
   } else {
-    console.log("Доступ запрещен для IP:", clientIP);
-    res.status(403).json({ error: "Доступ запрещен" });
+    console.log("Blocked IP:", clientIP);
+    res.status(403).json({ error: "Forbidden" });
   }
 });
 
