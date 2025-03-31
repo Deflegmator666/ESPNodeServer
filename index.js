@@ -7,45 +7,13 @@ const port = 3000;
 
 let motionDataArr = [];
 
-const ALLOWED_IPS = ["87.117.50.244", "127.0.0.1"]; // Добавьте нужные IP
-
-app.use(cors()); // Включите CORS
-
-app.use((req, res, next) => {
-  let clientIP =
-    req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
-    req.socket.remoteAddress;
-
-  clientIP = clientIP.replace(/^::ffff:/, "");
-  clientIP = clientIP === "::1" ? "127.0.0.1" : clientIP;
-
-  console.log("IP:", clientIP);
-
-  if (ALLOWED_IPS.includes(clientIP)) {
-    next();
-  } else {
-    console.log("Blocked IP:", clientIP);
-    res.status(403).json({ error: "Forbidden" });
-  }
-});
-
-// app.use((req, res, next) => {
-//   let clientIP = req.socket.remoteAddress;
-//   console.log(clientIP);
-//   if (ALLOWED_IPS.includes(clientIP)) {
-//     next();
-//   } else {
-//     res.status(403).json({ error: "Доступ запрещен" });
-//   }
-// });
-
-// app.use(
-//   cors({
-//     origin: CORSORIGIN2,
-//     methods: ["GET", "POST", "DELETE", "OPTIONS"], // Разрешенные методы
-//     allowedHeaders: ["Content-Type", "Authorization"], // Разрешенные заголовки
-//   })
-// );
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "OPTIONS"], // Разрешенные методы
+    allowedHeaders: ["Content-Type", "Authorization"], // Разрешенные заголовки
+  })
+);
 //app.options("*", cors());
 app.use(bodyParser.json());
 
