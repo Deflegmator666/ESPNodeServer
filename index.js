@@ -7,7 +7,7 @@ const port = 3000;
 
 let motionDataArr = [];
 
-const ALLOWED_IPS = ["87.117.50.244", "127.0.0.1"];
+const ALLOWED_IPS = ["87.117.50.243", "127.0.0.1"];
 
 app.use((req, res, next) => {
   // Получаем IP с учетом прокси (если используется)
