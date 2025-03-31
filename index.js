@@ -5,14 +5,52 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 
-app.use(
-  cors({
-    origin: "*", // Разрешить запросы с любого домена
-    methods: ["GET", "POST", "DELETE", "OPTIONS"], // Разрешенные методы
-    allowedHeaders: ["Content-Type", "Authorization"], // Разрешенные заголовки
-  })
-);
-app.options("*", cors());
+const ALLOWED_IPS = ["87.117.50.243"]; // Например: "95.123.45.67"
+
+app.use((req, res, next) => {
+  // Получаем IP с учетом прокси (если используется)
+  let clientIP = req.headers["x-forwarded-for"]
+    ? req.headers["x-forwarded-for"].split(",")[0].trim()
+    : req.socket.remoteAddress;
+
+  // Убираем префикс ::ffff: для IPv4 в IPv6 (например, ::ffff:192.168.1.1 → 192.168.1.1)
+  if (clientIP.startsWith("::ffff:")) {
+    clientIP = clientIP.substring(7);
+  }
+
+  // Для локального тестирования (::1 → 127.0.0.1)
+  if (clientIP === "::1") {
+    clientIP = "127.0.0.1";
+  }
+
+  console.log("Запрос от IP:", clientIP);
+
+  if (ALLOWED_IPS.includes(clientIP)) {
+    next();
+  } else {
+    console.log("Доступ запрещен для IP:", clientIP);
+    res.status(403).json({ error: "Доступ запрещен" });
+  }
+});
+
+// app.use((req, res, next) => {
+//   let clientIP = req.socket.remoteAddress;
+//   console.log(clientIP);
+//   if (ALLOWED_IPS.includes(clientIP)) {
+//     next();
+//   } else {
+//     res.status(403).json({ error: "Доступ запрещен" });
+//   }
+// });
+
+// app.use(
+//   cors({
+//     origin: CORSORIGIN2,
+//     methods: ["GET", "POST", "DELETE", "OPTIONS"], // Разрешенные методы
+//     allowedHeaders: ["Content-Type", "Authorization"], // Разрешенные заголовки
+//   })
+// );
+//app.options("*", cors());
 app.use(bodyParser.json());
 
 let motionDataArr = [];
