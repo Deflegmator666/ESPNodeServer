@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 
-const ALLOWED_IPS = ["87.117.50.243"]; // Например: "95.123.45.67"
+const ALLOWED_IPS = ["87.117.50.244"];
 
 app.use((req, res, next) => {
   // Получаем IP с учетом прокси (если используется)
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
   console.log("Запрос от IP:", clientIP);
 
-  if (ALLOWED_IPS.includes(clientIP)) {
+  if (ALLOWED_IPS[0] === clientIP) {
     next();
   } else {
     console.log("Доступ запрещен для IP:", clientIP);
