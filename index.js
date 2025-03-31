@@ -6,6 +6,7 @@ const app = express();
 const port = 3000;
 
 const ALLOWED_IPS = ["87.117.50.244"];
+let motionDataArr = [];
 
 app.use((req, res, next) => {
   // Получаем IP с учетом прокси (если используется)
@@ -52,8 +53,6 @@ app.use((req, res, next) => {
 // );
 //app.options("*", cors());
 app.use(bodyParser.json());
-
-let motionDataArr = [];
 
 app.delete("/data", (req, res) => {
   try {
