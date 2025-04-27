@@ -11,15 +11,13 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "*",
-    methods: ["GET", "POST", "DELETE", "OPTIONS"], // Разрешенные методы
-    allowedHeaders: ["Content-Type", "Authorization"], // Разрешенные заголовки
+    origin: process.env.DEV_URLS,
+    credentials: true,
   })
 );
 
 app.use("/", router);
 
-//app.options("*", cors());
 app.use(bodyParser.json());
 
 // app.get("/data", (req, res) => {
