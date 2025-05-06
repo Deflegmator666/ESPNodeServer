@@ -10,7 +10,7 @@ const login = async (req, res) => {
   try {
     let { login, password } = req.body;
     if (!login || !password) {
-      return res.json({ message: "Введите Ваш логин и пароль" });
+      return res.status(401).json({ message: "Введите Ваш логин и пароль" });
     }
     if (
       login === process.env.RAILWAY_VOLUME_NAME &&
