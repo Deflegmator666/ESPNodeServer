@@ -8,7 +8,7 @@ const generateJwt = () => {
 
 const login = async (req, res) => {
   try {
-    let { login, password } = req.body;
+    let { login, password, rememberButton } = req.body;
     if (!login || !password) {
       return res.status(401).json({ message: "Введите Ваш логин и пароль" });
     }
